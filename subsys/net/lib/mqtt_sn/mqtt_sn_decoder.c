@@ -67,6 +67,7 @@ static void decode_flags(struct mqtt_sn_msg *msg, struct mqtt_sn_flags *flags)
 static int decode_empty_message(struct mqtt_sn_msg *msg)
 {
 	if (mqtt_sn_msg_size(msg)) {
+		LOG_ERR("Message not empty");
 		return -EPROTO;
 	}
 
@@ -283,7 +284,7 @@ static int decode_msg_willmsgresp(struct mqtt_sn_msg *msg, struct mqtt_sn_param_
 	return 0;
 }
 
-int mqtt_sn_decode_msg(struct mqtt_sn_msg *msg, struct mqtt_sn_decode_param *params)
+int mqtt_sn_decode_msg(struct mqtt_sn_msg *msg, struct mqtt_sn_param *params)
 {
 	size_t len;
 	int err;
@@ -299,6 +300,8 @@ int mqtt_sn_decode_msg(struct mqtt_sn_msg *msg, struct mqtt_sn_decode_param *par
 	}
 
 	params->type = (enum mqtt_sn_msg_type)mqtt_sn_msg_pull_u8(msg);
+
+	LOG_INF("Decoding message type: %d", params->type);
 
 	switch (params->type) {
 	case MQTT_SN_MSG_TYPE_ADVERTISE:

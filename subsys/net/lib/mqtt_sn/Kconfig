@@ -11,11 +11,13 @@ config MQTT_SN_LIB
 
 if MQTT_SN_LIB
 
-module=MQTT_SN
-module-dep=NET_LOG
-module-str=Log level for MQTT-SN
-module-help=Enables mqtt-sn debug messages.
-source "subsys/net/Kconfig.template.log_config.net"
+config MQTT_SN_LIB_MSG_NUM
+	int "Number of messages that can be allocated at the same time"
+	default 10
+
+config MQTT_SN_LIB_MSG_HEAP_SIZE
+	int "Size of the heap pre-allocated for message data"
+	default 1024
 
 config MQTT_SN_KEEPALIVE
 	int "Maximum number of clients Keep alive time for MQTT-SN (in seconds)"
@@ -23,5 +25,28 @@ config MQTT_SN_KEEPALIVE
 	help
 	  Keep alive time for MQTT-SN (in seconds). Sending of Ping Requests to
 	  keep the connection alive are governed by this value.
+
+config MQTT_SN_LIB_N_RETRY
+	int "Number of times to retry messages"
+	range 1 20
+	default 5
+
+config MQTT_SN_LIB_T_RETRY
+	int "Time (seconds) to wait for responses"
+	default 10
+
+config MQTT_SN_LIB_REGISTERED_TOPIC_NUM
+	int "Number of topics that can be registered at the same time"
+	default 10
+
+config MQTT_SN_LIB_TOPIC_HEAP
+	int "Size of the heap pre-allocated for registered topic names"
+	default 512
+
+module=MQTT_SN
+module-dep=NET_LOG
+module-str=Log level for MQTT-SN
+module-help=Enables mqtt-sn debug messages.
+source "subsys/net/Kconfig.template.log_config.net"
 
 endif # MQTT_LIB

@@ -659,8 +659,13 @@ int mqtt_input(struct mqtt_client *client)
 
 static int read_publish_payload(struct mqtt_client *client, void *buffer,
 				size_t length, bool shall_block)
-{
-	int ret;
+{msg = mqtt_sn_encode_msg(&response);
+	if (!msg) {
+		return;
+	}
+
+	send_msg(client, msg);
+	mqtt_sn_msg_unref(msg);
 
 	NULL_PARAM_CHECK(client);
 
